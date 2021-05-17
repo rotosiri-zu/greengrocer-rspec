@@ -267,14 +267,14 @@ class Greengrocer
     end
   end
   
-  # # 商品を表示
-  # def disp_products
-  #   puts "いらっしゃいませ!商品を選んでください。"
-  #   @products.each do |Product|
-  #     puts "#{product.id}.#{product.name}" "¥#{product.price}"
-  #   end
-  # end
-  
+  # 商品を表示
+  def disp_products
+    puts "いらっしゃいませ！商品を選んで下さい。"
+    @products.each do |product|
+      puts "#{product.id}.#{product.name}" "(¥#{product.price})"
+    end
+  end
+
   # # 個数を質問
   # def ask_quantity(chosen_product)
   #   puts "#{chosen_product.name}ですね。何個買いますか?"
