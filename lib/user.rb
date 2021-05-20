@@ -9,7 +9,7 @@ class User
       select_product_num = gets.to_i
       @chosen_product = products.find{|product| product.id == select_product_num}
       break if !@chosen_product.nil?
-      puts "#{products.first.id}から#{products.last.id}の番号から選んでください"
+      puts "#{products.first.id}から#{products.last.id}の番号から選んでください。"
     end
   end
 
