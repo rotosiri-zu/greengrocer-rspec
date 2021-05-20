@@ -2,15 +2,16 @@ RSpec.describe User do
   # ▼単体テスト5
   describe ".choose_product" do
     # ▼単体テスト5 正常系(choose_productメソッド)
+    let(:user) { User.new }
+    let(:products) do
+      [
+        Product.new({ name: "トマト", price: 100 }),
+        Product.new({ name: "きゅうり", price: 200 })
+      ]
+    end
+    let(:correct_product_id_input) { "#{products.first.id}\n" }
     context "存在するid(productsの最初の要素のid)を入力したとき" do
-      let(:user) { User.new }
-      let(:products) do
-        [
-          Product.new({ name: "トマト", price: 100 }),
-          Product.new({ name: "きゅうり", price: 200 })
-        ]
-      end
-      let(:correct_product_id_input) { "#{products.first.id}\n" }
+      
       # 以下3つのexampleの処理の前に毎回実行
       before do
         allow(ARGF).to receive(:gets).and_return correct_product_id_input
@@ -30,37 +31,25 @@ RSpec.describe User do
     end
 
     # ▼単体テスト5 異常系(choose_productメソッド)
-    context "商品一覧の最初のidより1小さい数値を入力したとき" do
-      it "再入力を促すこと" do
-        user = User.new
-        products = [
-          Product.new({ name: "トマト", price: 100 }),
-          Product.new({ name: "きゅうり", price: 200 }),
-        ]
-        wrong_product_id_input = "#{products.first.id - 1}\n"
-        correct_product_id_input = "#{products.first.id}\n"
-        prompt_re_enter_msg = /#{products.first.id}から#{products.last.id}の番号から選んでください。/
+    let(:prompt_re_enter_msg) { /#{products.first.id}から#{products.last.id}の番号から選んでください。/ }
+
+    shared_examples "再入力を促すこと" do
+      it do
         allow(ARGF).to receive(:gets).and_return wrong_product_id_input, correct_product_id_input
         expect { user.choose_product(products) }.to output(prompt_re_enter_msg).to_stdout
       end
+    end
+    context "商品一覧の最初のidより1小さい数値を入力したとき" do
+      let(:wrong_product_id_input) { "#{products.first.id - 1}\n" }
+      it_behaves_like "再入力を促すこと"
     end
     context "商品一覧の最後のidより1大きい数値を入力したとき" do
-      it "再入力を促すこと" do
-        user = User.new
-        products = [
-          Product.new({ name: "トマト", price: 100 }),
-          Product.new({ name: "きゅうり", price: 200 }),
-        ]
-        wrong_product_id_input = "#{products.last.id + 1}\n"
-        correct_product_id_input = "#{products.first.id}\n"
-        prompt_re_enter_msg = /#{products.first.id}から#{products.last.id}の番号から選んでください。/
-        allow(ARGF).to receive(:gets).and_return wrong_product_id_input, correct_product_id_input
-        expect { user.choose_product(products) }.to output(prompt_re_enter_msg).to_stdout
-      end
+      let(:wrong_product_id_input) { "#{products.last.id + 1}\n" }
+      it_behaves_like "再入力を促すこと"
     end
     context "数値以外の文字列を入力したとき" do
-      it "再入力を促すこと" do
-      end
+      let(:wrong_product_id_input) { "hoge\n" }
+      it_behaves_like "再入力を促すこと"
     end
   end
 end
