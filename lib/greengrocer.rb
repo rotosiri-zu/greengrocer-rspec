@@ -275,10 +275,10 @@ class Greengrocer
     end
   end
 
-  # # 個数を質問
-  # def ask_quantity(chosen_product)
-  #   puts "#{chosen_product.name}ですね。何個買いますか?"
-  # end
+  # 個数を質問
+  def ask_quantity(chosen_product)
+    puts "#{chosen_product.name}ですね。何個買いますか?"
+  end
   
   # # 合計金額を計算
   # def calculate_charges(user)
