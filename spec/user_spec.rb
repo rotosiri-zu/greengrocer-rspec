@@ -1,8 +1,8 @@
 RSpec.describe User do
   # ▼単体テスト5
+  let(:user) { User.new }
   describe ".choose_product" do
     # ▼単体テスト5 正常系(choose_productメソッド)
-    let(:user) { User.new }
     let(:products) do
       [
         Product.new({ name: "トマト", price: 100 }),
@@ -74,6 +74,35 @@ RSpec.describe User do
         let(:correct_quantity_input) { "#{rand(2..100)}\n" }
         it_behaves_like "@quantity_of_productが,入力値を整数化した値と等しいこと" do
         end
+      end
+
+      # ▼単体テスト7 異常系(decide_quantityメソッド)
+      let(:prompt_re_enter_msg) { /1個以上選んでください。/ }
+
+
+      shared_examples "再入力を促すこと" do
+        it do
+          allow(ARGF).to receive(:gets).and_return wrong_quantity_input, correct_quantity_input
+          expect { user.decide_quantity }.to output(prompt_re_enter_msg).to_stdout
+        end
+      end
+
+      context "0を入力したとき" do
+        let(:wrong_quantity_input) { "0\n" }
+        let(:correct_quantity_input) { "1\n" }
+        it_behaves_like "再入力を促すこと" 
+      end
+
+      context "負の数値を入力したとき" do
+        let(:wrong_quantity_input) { "0\n" }
+        let(:correct_quantity_input) { "1\n" }
+        it_behaves_like "再入力を促すこと" 
+      end
+
+      context "数値以外の文字列を入力したとき" do
+        let(:wrong_quantity_input) { "0\n" }
+        let(:correct_quantity_input) { "1\n" }
+        it_behaves_like "再入力を促すこと"
       end
     end
   end
