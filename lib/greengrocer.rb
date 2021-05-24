@@ -252,9 +252,9 @@
 class Greengrocer
   attr_reader :products
   # 定数を設定
-  # DISCOUNT_STANDARD_VALUE = 5 # 割引きを適用する個数の基準値（変更可）
-  # DISCOUNT_RATE = 0.1 # 割引率（変更可）
-  # AFTER_DISCONUT_RATE = 1 - DISCOUNT_RATE # 割引後の本体価格の割合（変更不可）
+  DISCOUNT_STANDARD_VALUE = 5 # 割引きを適用する個数の基準値（変更可）
+  DISCOUNT_RATE = 0.1 # 割引率（変更可）
+  AFTER_DISCONUT_RATE = 1 - DISCOUNT_RATE # 割引後の本体価格の割合（変更不可）
 
   def initialize(product_params)
     @products = []
@@ -280,16 +280,16 @@ class Greengrocer
     puts "#{chosen_product.name}ですね。何個買いますか?"
   end
   
-  # # 合計金額を計算
-  # def calculate_charges(user)
-  #   total_price = user.chosen_product.price * user.quantity_of_product
-  #   if user.quantity_of_product >= DISCOUNT_STANDARD_VALUE
-  #     puts "#{DISCOUNT_STANDARD_VALUE}個以上なので#{(DISCOUNT_RATE*100).floor}％割引になります!"
-  #     total_price *= AFTER_DISCONUT_RATE
-  #   end
-  #   puts "合計金額は#{total_price.floor}円です。"
-  #   puts "お買い上げありがとうございました!"
-  # end
+  # 合計金額を計算
+  def calculate_charges(user)
+    total_price = user.chosen_product.price * user.quantity_of_product
+    if user.quantity_of_product >= DISCOUNT_STANDARD_VALUE
+      puts "#{DISCOUNT_STANDARD_VALUE}個以上なので#{(DISCOUNT_RATE*100).floor}％割引になります!"
+      total_price *= AFTER_DISCONUT_RATE
+    end
+    puts "合計金額は#{total_price.floor}円です。"
+    puts "お買い上げありがとうございました!"
+  end
 end
 
 # # class User
