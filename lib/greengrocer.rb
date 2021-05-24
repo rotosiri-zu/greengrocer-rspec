@@ -249,48 +249,48 @@
 # #   end
 # # end
 
-class Greengrocer
-  attr_reader :products
-  # 定数を設定
-  DISCOUNT_STANDARD_VALUE = 5 # 割引きを適用する個数の基準値（変更可）
-  DISCOUNT_RATE = 0.1 # 割引率（変更可）
-  AFTER_DISCONUT_RATE = 1 - DISCOUNT_RATE # 割引後の本体価格の割合（変更不可）
+# class Greengrocer
+#   attr_reader :products
+#   # 定数を設定
+#   DISCOUNT_STANDARD_VALUE = 5 # 割引きを適用する個数の基準値（変更可）
+#   DISCOUNT_RATE = 0.1 # 割引率（変更可）
+#   AFTER_DISCONUT_RATE = 1 - DISCOUNT_RATE # 割引後の本体価格の割合（変更不可）
 
-  def initialize(product_params)
-    @products = []
-    register_product(product_params)
-  end
-  # 商品を登録
-  def register_product(product_params)
-    product_params.each do |param|
-      @products << Product.new(param)
-    end
-  end
+#   def initialize(product_params)
+#     @products = []
+#     register_product(product_params)
+#   end
+#   # 商品を登録
+#   def register_product(product_params)
+#     product_params.each do |param|
+#       @products << Product.new(param)
+#     end
+#   end
   
-  # 商品を表示
-  def disp_products
-    puts "いらっしゃいませ！商品を選んで下さい。"
-    @products.each do |product|
-      puts "#{product.id}.#{product.name}" "(¥#{product.price})"
-    end
-  end
+#   # 商品を表示
+#   def disp_products
+#     puts "いらっしゃいませ！商品を選んで下さい。"
+#     @products.each do |product|
+#       puts "#{product.id}.#{product.name}" "(¥#{product.price})"
+#     end
+#   end
 
-  # 個数を質問
-  def ask_quantity(chosen_product)
-    puts "#{chosen_product.name}ですね。何個買いますか?"
-  end
+#   # 個数を質問
+#   def ask_quantity(chosen_product)
+#     puts "#{chosen_product.name}ですね。何個買いますか?"
+#   end
   
-  # 合計金額を計算
-  def calculate_charges(user)
-    total_price = user.chosen_product.price * user.quantity_of_product
-    if user.quantity_of_product >= DISCOUNT_STANDARD_VALUE
-      puts "#{DISCOUNT_STANDARD_VALUE}個以上なので#{(DISCOUNT_RATE*100).floor}％割引になります!"
-      total_price *= AFTER_DISCONUT_RATE
-    end
-    puts "合計金額は#{total_price.floor}円です。"
-    puts "お買い上げありがとうございました!"
-  end
-end
+#   # 合計金額を計算
+#   def calculate_charges(user)
+#     total_price = user.chosen_product.price * user.quantity_of_product
+#     if user.quantity_of_product >= DISCOUNT_STANDARD_VALUE
+#       puts "#{DISCOUNT_STANDARD_VALUE}個以上なので#{(DISCOUNT_RATE*100).floor}％割引になります!"
+#       total_price *= AFTER_DISCONUT_RATE
+#     end
+#     puts "合計金額は#{total_price.floor}円です。"
+#     puts "お買い上げありがとうございました!"
+#   end
+# end
 
 # # class User
 # #   attr_reader :chosen_product, :quantity_of_product
@@ -350,3 +350,52 @@ end
 # # user.decide_quantity
 # # # 金額金額を計算（実引数をuserというインスタンスに設定）
 # # greengrocer1.calculate_charges(user)
+
+# Greengrocerクラスを定義
+class Greengrocer
+  # 八百屋の開店と同時に商品インスタンスを生成
+  # 仮引数はproduct_params
+  # (1)クラスの外から参照可能にする
+  attr_reader :products
+  def initialize(product_params)
+    @products = []
+    register_product(product_params)
+  end
+
+  # 商品を登録するメソッドを定義
+  # 仮引数とメソッド内の変数をadding_productsからproduct_paramsに変更
+  # 商品を登録
+  def register_product(product_params)
+    product_params.each do |param|
+      @products << Product.new(param)
+    end  
+  end
+
+   # (2)product.name、product.priceと書くことで参照
+  # （eachメソッドを使用しているため単数形になっている）
+  # (4).with_index(1)を外し、idを利用した形にする
+  # 商品を表示
+  def disp_products
+    puts "いらっしゃいませ！商品を選んで下さい。"
+    @products.each do |product|
+      puts "#{product.id}.#{product.name}" "（¥#{product.price}円）"
+    end
+  end
+
+  # (2)(3)「個数を質問する」メソッドを定義、引数とコードを調整
+  def ask_quantity(chosen_product)
+    puts "#{chosen_product.name}ですね。何個買いますか？"
+  end  
+
+  # (2)「合計金額を計算する」メソッドを追加
+   # 合計金額を計算（引数をuserとし、メソッドの中も調整）
+  def calculate_charges(user)
+    total_price = user.chosen_product.price * user.quantity_of_product
+    if user.quantity_of_product >= 5
+      puts "5個以上なので10%割引となります!"
+      total_price *= 0.9
+    end
+    puts "合計金額は#{total_price.floor}円です。"
+    puts "お買い上げありがとうございました!"
+  end
+end
